@@ -1,4 +1,4 @@
 import simulator
 
-simulator.start([{"name": "LoadProfile", "freq": 5},{"name": "PvProfile", "freq": 10}])
+simulator.start([{"device_identifier": "meter123", "profile": "LoadProfile", "freq": 5}])
 
