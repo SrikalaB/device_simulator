@@ -1,5 +1,4 @@
-from simulator import Simulator
-from profiles.profile import LoadProfile
+import simulator
 
-Simulator().start([LoadProfile])
+simulator.start([{"name": "LoadProfile", "freq": 5},{"name": "PvProfile", "freq": 10}])
 
