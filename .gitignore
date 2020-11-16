@@ -45,3 +45,6 @@ coverage.xml
 
 # Configs
 configs/*
+
+# files
+messaging/output_files/*

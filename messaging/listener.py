@@ -15,7 +15,7 @@ def main():
             print("Received message {}".format(body))
             payload_type = body.get("payload_type", None)
             for handler in  HANDLER_MAPPING[payload_type]:
-                print("Calling handler {}".format(handler))
+                print("Calling handler {}".format(handler.__name__))
                 handler(body).call()
         except Exception as e:
             print("Unable to understand received message {}".format(str(e)))

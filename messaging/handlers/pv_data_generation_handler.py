@@ -2,14 +2,20 @@ from profiles.constants import *
 from profiles.profile import PvProfile
 import datetime
 import csv
+from utils import calculate_net_load
+
 
 class PvDataGenerationHandler(object):
 
     def __init__(self, message):
-        self.payload_type = message.get("payload_type")
-        self.meter_power_value = message.get("value")
-        self.meter_power_unit = message.get("unit")
-        self.timestamp = datetime.datetime.strptime(message.get("timestamp"), "%Y-%m-%d %H:%M:%S")
+        self.message = message
+        try:
+            self.payload_type = self.message.get("payload_type")
+            self.meter_power_value = self.message.get("value")
+            self.meter_power_unit = self.message.get("unit")
+            self.timestamp = datetime.datetime.strptime(self.message.get("timestamp"), "%Y-%m-%d %H:%M:%S")
+        except Exception as e:
+            print("Unable to execute handler due to incorrect message format - {}".format(str(e)))
 
     @property
     def meter_power_value(self):
@@ -33,16 +39,20 @@ class PvDataGenerationHandler(object):
 
     def call(self):
         pv_value, _unit = PvProfile().get_value_at_time(self.timestamp, self.meter_power_unit)
-        # Negating value to indicate that Pv value indicates power production and not consumption
-        pv_value = -pv_value
-        self.write_values_to_csv(self.timestamp, pv_value, self.meter_power_value, self.meter_power_unit)
 
-    def write_values_to_csv(self, timestamp, meter_value, pv_value, unit):
-        file_name = "{}_meter_with_pv.csv".format(timestamp.strftime("%Y-%m-%d"))
         fields = ["timestamp", "Meter value", "PV value", "Net load", "unit"]
-        with open(file_name, 'a') as f:
+        net_load = calculate_net_load(self.meter_power_value, pv_value)
+        self.write_values_to_csv(self.output_filename(), fields, [self.timestamp, self.meter_power_value, pv_value,
+                                 net_load, self.meter_power_unit])
+
+    @staticmethod
+    def write_values_to_csv(filename, header, values_row):
+        with open(filename, 'a') as f:
             writer = csv.writer(f)
             if f.tell() == 0:
-                writer.writerow(fields)
-            writer.writerow([timestamp, meter_value, pv_value, meter_value+pv_value, unit])
-        print("Wrote to csv pv- {} meter- {} unit-{}".format(pv_value, meter_value, unit))
+                writer.writerow(header)
+            writer.writerow(values_row)
+            print("Completed writing row to file {}".format(values_row))
+    def output_filename(self):
+        return os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))),
+                            "output_files", "{}_meter_with_pv.csv".format(self.timestamp.strftime("%Y-%m-%d")))

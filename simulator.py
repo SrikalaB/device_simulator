@@ -1,7 +1,6 @@
 from datetime import datetime, timedelta
 import asyncio
 import json
-import importlib
 from utils import round_time
 from profiles.profile import *
 from messaging.producer import MessageProducer
@@ -25,6 +24,7 @@ async def publish_value(device, profile_class, freq, start_time):
                           "device": device, "unit": unit, "payload_type": profile_class().TYPE })
         MessageProducer().publish(msg, queue=SIMULATOR_QUEUE)
         print("Published {} for {} with frequency {}".format(msg, profile_class, freq))
+        return
 
 
 def start(profile_details):
