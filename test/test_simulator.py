@@ -21,7 +21,7 @@ class TestSimulator(unittest.TestCase):
             profile_mock.return_value = mock.Mock(get_value_at_time=get_value_at_time_mock, TYPE="Profile")
 
             loop = asyncio.get_event_loop()
-            loop.run_until_complete(simulator.publish_value("my_device", profile_mock, 2, datetime.datetime(2020, 10, 20, 20, 11, 12)))
+            loop.run_until_complete(simulator.publish_value(False, "my_device", profile_mock, 2, datetime.datetime(2020, 10, 20, 20, 11, 12)))
             loop.close()
             producer_publish_mock.assert_called_once_with(ANY, queue='meter_load')
 

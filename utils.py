@@ -19,6 +19,12 @@ def round_time(dt=None, date_delta=datetime.timedelta(minutes=1)):
 
 
 def calculate_net_load(meter_value, pv_value):
+    """
+    Subtracts PV value from meter value to calculate net load of consumption. Negates PV value if it is not already negative
+    :param meter_value: float.
+    :param pv_value: float
+    :return: net_load: float.
+    """
     if pv_value <= 0:
         pass
     else:

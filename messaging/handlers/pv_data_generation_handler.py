@@ -16,6 +16,7 @@ class PvDataGenerationHandler(object):
             self.timestamp = datetime.datetime.strptime(self.message.get("timestamp"), "%Y-%m-%d %H:%M:%S")
         except Exception as e:
             print("Unable to execute handler due to incorrect message format - {}".format(str(e)))
+            raise e
 
     @property
     def meter_power_value(self):
@@ -37,22 +38,35 @@ class PvDataGenerationHandler(object):
             raise ValueError("Meter value's unit incomprehensible")
         self._meter_power_unit = value
 
-    def call(self):
+    def __call__(self):
+        """
+        Gets value from PV profile for the timestamp of meter value. Calculates net load and writes all values to csv
+        :return:
+        """
         pv_value, _unit = PvProfile().get_value_at_time(self.timestamp, self.meter_power_unit)
 
         fields = ["timestamp", "Meter value", "PV value", "Net load", "unit"]
         net_load = calculate_net_load(self.meter_power_value, pv_value)
-        self.write_values_to_csv(self.output_filename(), fields, [self.timestamp, self.meter_power_value, pv_value,
-                                 net_load, self.meter_power_unit])
+        self.write_values_to_csv_row(self.output_filename(), [self.timestamp, self.meter_power_value, pv_value,
+                                     net_load, self.meter_power_unit], fields)
 
     @staticmethod
-    def write_values_to_csv(filename, header, values_row):
+    def write_values_to_csv_row(filename, values_row, header=None):
+        """
+        Writes a row content to a csv.
+        :param filename: str Full file path of csv
+        :param header: List [Optional] Header row of csv
+        :param values_row: List Values to be written in row
+        :return:
+        """
         with open(filename, 'a') as f:
             writer = csv.writer(f)
             if f.tell() == 0:
-                writer.writerow(header)
+                if header is not None:
+                    writer.writerow(header)
             writer.writerow(values_row)
             print("Completed writing row to file {}".format(values_row))
+
     def output_filename(self):
         return os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))),
                             "output_files", "{}_meter_with_pv.csv".format(self.timestamp.strftime("%Y-%m-%d")))

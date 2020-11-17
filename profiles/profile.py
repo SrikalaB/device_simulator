@@ -27,12 +27,14 @@ class Profile:
     def build_from_csv_file(self):
         try:
             _profile_dict = {}
-            reader = csv.reader(open(self.file_path, 'r'))
+            csv_file = open(self.file_path, 'r')
+            reader = csv.reader(csv_file)
             next(reader) # Skip header
             for row in reader:
                 time, value, unit = row
                 value = float(value)
                 _profile_dict[time] = (value, unit)
+            csv_file.close()
             return _profile_dict
         except OSError as e:
             print("Could not open/read file:", self.file_path)
