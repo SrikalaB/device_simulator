@@ -4,6 +4,7 @@ A python script that allows you to generate synthetic smart meters data and Sola
 The script reads a CSV and cyclically follows the pattern of values to simulate a 24-hour running smart meter.
 The simulated values are published onto RabbitMQ queues. The smart meter data as it arrives, is added to the PV generation data and the values are written to a csv with timestamp
 
+Assumptions: The value of PV is negated and added to meter value.
 ### Table of Contents
 1. [Requirements](#requirements)
 2. [Running from source code](#method-1-running-from-source-code)
