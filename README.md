@@ -120,7 +120,6 @@ To view the csv. From device_simulator folder
        2020-11-17_meter_with_pv.csv 2020-11-18_meter_with_pv.csv
    ```
     
-
 ### Running Tests
 The script comes with test cases that can be run using:
 
@@ -130,4 +129,3 @@ The script comes with test cases that can be run using:
 - Use Dataframes from python pandas to allow for resampling of source data for different time intervals.
 - Add time zone capability to use simulator to produce values in different timezones.
 - More test coverage
-
