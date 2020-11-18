@@ -124,7 +124,7 @@ To view the csv. From device_simulator folder
 ### Running Tests
 The script comes with test cases that can be run using:
 
-`python -m unittest test.test_simulator`
+`python -m unittest discover test`
 
 ### Improvements
 - Use Dataframes from python pandas to allow for resampling of source data for different time intervals.
