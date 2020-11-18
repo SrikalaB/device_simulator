@@ -12,4 +12,4 @@ COPY . .
 
 RUN mkdir ./messaging/handlers/output_files
 
-CMD ["python", "./messaging/listener.py"]
+CMD ["python", "./listener.py"]

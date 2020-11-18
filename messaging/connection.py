@@ -1,36 +1,43 @@
-import pika
+import sys
 import os
+import pika
 import yaml
+from utils import on_error_retry
 
 
 class Connection(object):
-    def __init__(self):
-        self.connection = None
 
     @classmethod
-    def __get_configs(cls, from_config_file=True):
+    def __get_configs(cls, from_config_file=False):
         if from_config_file:
             with open(os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), 'configs',
                                    'rabbitmq.yml')) as file:
                 configs = yaml.load(file, Loader=yaml.FullLoader)
                 return configs
         else:
-            return {"brokers": os.getenv('BROKERS', "127.0.0.1"),
+            user = os.getenv("USER", None)
+            password = os.getenv("PASSWORD", None)
+            if user is None or password is None:
+                print("[ERROR] Set env variables USER and PASSWORD to hold auth credentials to RabbitMQ")
+                sys.exit(1)
+            return {"brokers": os.getenv('BROKERS', "rabbitmq"),
                     "port": os.getenv('PORT', "5672"),
-                    "user": os.getenv("USER", None),
-                    "password": os.getenv("PASSWORD", None)}
+                    "user": user,
+                    "password": password}
 
+    @on_error_retry
     def get_channel(self):
         try:
             configs = Connection.__get_configs()
-            self.connection = pika.BlockingConnection(
+            connection = pika.BlockingConnection(
                 pika.ConnectionParameters(configs['brokers'], configs['port'], '/', pika.PlainCredentials(configs['user'],
                                                                                                           configs['password'])))
-            if self.connection is None:
+            if connection is None:
                 raise Exception("Unable to establish connection to RabbitMQ")
-            return self.connection.channel()
+            return connection.channel()
         except Exception as e:
-            raise Exception("Unable to connect to RabbitMQ")
+            print("[ERROR] Unable to connect to RabbitMQ. Retrying...")
+            raise Exception("[ERROR] Unable to connect to RabbitMQ")
 
-    def close(self):
-        self.connection.close()
+    def close(self, connection):
+        connection.close()

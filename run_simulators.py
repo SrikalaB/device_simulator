@@ -17,5 +17,5 @@ print(f'Starting {args.profile} simulation for device with identifier meter123. 
       'Reading will start at current time UTC and will be published at 1 min intervals')
 
 
-simulator.start([{"device_identifier": "meter123", "profile": args.profile, "freq": 60}])
+simulator.start([{"device_identifier": "meter123", "profile": args.profile, "freq": 2}])
 
