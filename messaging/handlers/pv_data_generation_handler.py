@@ -43,6 +43,7 @@ class PvDataGenerationHandler(object):
         Gets value from PV profile for the timestamp of meter value. Calculates net load and writes all values to csv
         :return:
         """
+        print("[SUCCESS] {} called to handle message".format(PvDataGenerationHandler.__name__))
         pv_value, _unit = PvProfile().get_value_at_time(self.timestamp, self.meter_power_unit)
 
         fields = ["timestamp", "Meter value", "PV value", "Net load", "unit"]
@@ -65,7 +66,7 @@ class PvDataGenerationHandler(object):
                 if header is not None:
                     writer.writerow(header)
             writer.writerow(values_row)
-            print("Completed writing row to file {}".format(values_row))
+            print("[SUCCESS] Completed writing row to file {}".format(values_row))
 
     def output_filename(self):
         return os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))),

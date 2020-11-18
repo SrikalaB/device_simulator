@@ -22,6 +22,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.lst
+    volumes:
+      - ./messaging/output_files:/usr/src/app/messaging/output_files
     environment:
       - BROKERS
       - PORT
