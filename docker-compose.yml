@@ -7,7 +7,7 @@ services:
       - "15672:15672"
   simulator:
     environment:
-      - BROKERS
+      - BROKERS=rabbitmq
       - PORT
       - USER
       - PASSWORD

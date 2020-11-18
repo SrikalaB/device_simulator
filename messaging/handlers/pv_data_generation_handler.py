@@ -46,7 +46,7 @@ class PvDataGenerationHandler(object):
         print("[SUCCESS] {} called to handle message".format(PvDataGenerationHandler.__name__))
         pv_value, _unit = PvProfile().get_value_at_time(self.timestamp, self.meter_power_unit)
 
-        fields = ["timestamp", "Meter value", "PV value", "Net load", "unit"]
+        fields = ["Timestamp", "Meter value", "PV value", "Net load", "Unit"]
         net_load = calculate_net_load(self.meter_power_value, pv_value)
         self.write_values_to_csv_row(self.output_filename(), [self.timestamp, self.meter_power_value, pv_value,
                                      net_load, self.meter_power_unit], fields)

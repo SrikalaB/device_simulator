@@ -33,7 +33,7 @@ async def publish_value(run_indefinitely, device, profile_class, freq, start_tim
                           "device": device, "unit": unit, "payload_type": profile_class().TYPE })
         producer = MessageProducer.get_instance()
         producer.publish(msg, queue=SIMULATOR_QUEUE)
-        print("[SUCCESS] Published {} for {} with frequency {}".format(msg, profile_class.__name__, freq))
+        print("[SUCCESS] Published {} for {} with frequency {} seconds".format(msg, profile_class_object.__class__.__name__, freq))
         await asyncio.sleep(freq)
         if not run_indefinitely:
             return
