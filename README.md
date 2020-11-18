@@ -5,16 +5,16 @@ The script reads a CSV and cyclically follows the pattern of values to simulate 
 The simulated values are published onto RabbitMQ queues. The smart meter data as it arrives, is added to the PV generation data and the values are written to a csv with timestamp
 
 ### Table of Contents
-1. [Requirements](#markdown-header-requirements)
-2. [Setting up the script](#markdown-header-setting-up-the-script)
-    1. [From source code](#markdown-header-from-source-code)
-3. [Input specifications](#markdown-header-input-specifications)
-4. [Usage](#markdown-header-usage)
-    1. [Example - Interactive Method](#markdown-header-usage-interactive-method)
-    2. [Example - Input json file method](#markdown-header-input-json-file-method)
-5. [Running Tests](#markdown-header-running-tests)
+1. [Requirements](#requirements)
+2. [Running from source code](#method-1-running-from-source-code)
+    1. [Run Producer](#method-1-running-from-source-code)
+    2. [Run Listener](#to-run-listener-that-adds-pv-value-and-outputs-results-to-file)
+3. [Run using docker-compose](#method-2-using-docker-containers-with-docker-compose-to-run-simulation)
+4. [Viewing output csv files](#viewing-output-csv-files)
+5. [Running Tests](#running-tests)
+5. [Improvements](#improvements)
 
-### Requirements to run 
+### Requirements 
 - Method 1: To run script manually from source code
     - Python 3.7 or higher
     - RabbitMQ service
@@ -25,6 +25,7 @@ The simulated values are published onto RabbitMQ queues. The smart meter data as
     
 
 ### Method 1: Running from source code
+**Run Rroducer**
 Setting up the source code gives more control and you can change input parameters
 - Clone the repo and cd into "device_simulator" folder
     - `$> git clone git@github.com:SrikalaB/device_simulator.git`
@@ -62,7 +63,8 @@ Setting up the source code gives more control and you can change input parameter
 
 As seen it assumes a frequency of 1 minute and publishes a message to RabbitMQ using user credentials. Leave the process running to let the simulation run.
 
-##### To run listener that adds PV value and outputs results to file
+#### To run listener that adds PV value and outputs results to file
+**Run Listener**
 - Open the repo code again in another terminal
     - `$>cd device_simulator`
     ```
