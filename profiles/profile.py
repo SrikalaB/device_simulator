@@ -1,7 +1,5 @@
 import profiles.constants as ProfileConstants
-from datetime import datetime
 import csv
-import pandas as pd
 
 
 class Profile:
@@ -24,7 +22,14 @@ class Profile:
             raise ValueError("Scaling factor can only be a numeric value")
         self._scale = value
 
-    def build_from_csv_file(self):
+    def _build_from_csv_file(self):
+        """
+        Opens CSV mentioned in file path creates a dictionary with key as time and value as profile's reading
+        Example entry:
+          {"01:10:20": (1230, W)}
+          At 1 o clock 10 mins and 20 seconds the device's instantaneous reading is 1230 Watts
+        :return:
+        """
         try:
             _profile_dict = {}
             csv_file = open(self.file_path, 'r')
@@ -42,7 +47,7 @@ class Profile:
 
     def _get_profile(self):
         if not self.profile:
-            self.profile = self.build_from_csv_file()
+            self.profile = self._build_from_csv_file()
         return self.profile
 
     def get_value_at_time(self, timestamp, desired_unit=ProfileConstants.WATTS):

@@ -25,7 +25,6 @@ async def publish_value(run_indefinitely, device, profile_class, freq, start_tim
     profile_class_object = profile_class()
     to_run = True
     while to_run:
-        await asyncio.sleep(freq)
         current_time_utc = datetime.utcnow()
         seconds_elapsed = int((current_time_utc - loop_start_time_utc).total_seconds())
         required_timestamp = round_time(start_time + timedelta(seconds=seconds_elapsed))
@@ -34,6 +33,7 @@ async def publish_value(run_indefinitely, device, profile_class, freq, start_tim
                           "device": device, "unit": unit, "payload_type": profile_class().TYPE })
         MessageProducer().publish(msg, queue=SIMULATOR_QUEUE)
         print("Published {} for {} with frequency {}".format(msg, profile_class.__name__, freq))
+        await asyncio.sleep(freq)
         if not run_indefinitely:
             return
 

@@ -65,7 +65,7 @@ class PvDataGenerationHandler(object):
                 if header is not None:
                     writer.writerow(header)
             writer.writerow(values_row)
-            print("Completed writing row to file {}".format(values_row))
+            print("Completed writing row to file {}\n\n".format(values_row))
 
     def output_filename(self):
         return os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))),

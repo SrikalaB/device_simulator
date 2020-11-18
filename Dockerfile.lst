@@ -1,0 +1,15 @@
+FROM python:3.7-alpine
+
+RUN mkdir /usr/src/app
+WORKDIR /usr/src/app
+
+COPY ./requirements.txt .
+RUN pip install -r requirements.txt
+
+ENV PYTHONUNBUFFERED 1
+
+COPY . .
+
+RUN mkdir ./messaging/handlers/output_files
+
+CMD ["python", "./messaging/listener.py"]
