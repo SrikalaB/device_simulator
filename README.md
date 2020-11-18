@@ -14,17 +14,17 @@ The simulated values are published onto RabbitMQ queues. The smart meter data as
     2. [Example - Input json file method](#markdown-header-input-json-file-method)
 5. [Running Tests](#markdown-header-running-tests)
 
-### Requirements
-- To run script manually from source code
+### Requirements to run 
+- Method 1: To run script manually from source code
     - Python 3.7 or higher
     - RabbitMQ service
     - virtualenv (to create virtualenv)
-- To run using docker compose
+- Method 2: To run using docker compose
     - docker (Tested on 2.3.0.4)
     - docker-compose (Tested on 1.26.2)
     
 
-#### Running from source code
+### Method 1: Running from source code
 Setting up the source code gives more control and you can change input parameters
 - Clone the repo and cd into "device_simulator" folder
     - `$> git clone git@github.com:SrikalaB/device_simulator.git`
@@ -49,7 +49,7 @@ Setting up the source code gives more control and you can change input parameter
                             or PvProfile]
     ```
 - Example: To run household meter simulation
-    - `$>python run_simulators.py --profile LoadProfile`
+
     ``` 
     $> python run_simulators.py --profile LoadProfile
     If you wish to stop simulation at any point - Press ctrl+C
@@ -73,7 +73,7 @@ As seen it assumes a frequency of 1 minute and publishes a message to RabbitMQ u
     [SUCCESS] Completed writing row to file [datetime.datetime(2020, 11, 18, 17, 29), 5249.72, 1669.92, 3579.8, 'W']
     ```
 
-#### Using docker containers with docker-compose to run script flow
+### Method 2: Using docker containers with docker-compose to run simulation
 Setting up using docker compose lets you run the simulation and view the output files quickly
 - Clone the repo and cd into "device_simulator" folder
     - `$> git clone git@github.com:SrikalaB/device_simulator.git`
